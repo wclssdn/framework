@@ -206,6 +206,12 @@ class Builder
     protected $useWritePdo = false;
 
     /**
+     * Insert mode: replace, ignore
+     * @var string
+     */
+    public $insertMode = '';
+    
+    /**
      * Create a new query builder instance.
      *
      * @param  \Illuminate\Database\ConnectionInterface  $connection
@@ -2053,6 +2059,30 @@ class Builder
         $values = $this->cleanBindings($values);
 
         return $this->processor->processInsertGetId($this, $sql, $values, $sequence);
+    }
+    /**
+     * Insert ignore a new record into the database.
+     *
+     * @param  array  $values
+     * @return bool
+     */
+    public function insertIgnore(array $values){
+    	$this->insertMode = 'ignore';
+    	$result = $this->insert($values);
+    	$this->insertMode = '';
+    	return $result;
+    }
+    /**
+     * Replace a new record into the database.
+     *
+     * @param  array  $values
+     * @return bool
+     */
+    public function replace(array $values){
+    	$this->insertMode = 'replace';
+    	$result = $this->insert($values);
+    	$this->insertMode = '';
+    	return $result;
     }
 
     /**

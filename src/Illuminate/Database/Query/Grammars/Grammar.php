@@ -721,6 +721,13 @@ class Grammar extends BaseGrammar
 
         $parameters = implode(', ', $parameters);
 
+        switch (strtolower($query->insertMode)){
+        	case 'replace':
+        		return "replace into $table ($columns) values $parameters";
+        	case 'ignore':
+        		return "insert ignore into $table ($columns) values $parameters";
+        }
+        
         return "insert into $table ($columns) values $parameters";
     }
 
